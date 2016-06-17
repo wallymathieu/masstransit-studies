@@ -1,2 +1,15 @@
-﻿<h2>Welcome to ASP.NET MVC @ViewData["Version"] on @ViewData["Runtime"]!</h2>
-
+﻿@model MassTransitStudies.Service.ReceivedMessages
+<h2>Welcome to ASP.NET MVC @ViewData["Version"] on @ViewData["Runtime"]!</h2>
+<table>
+  <thead>
+    <tr><th>Value</th></tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model.Values)
+    {
+        <tr>
+          <td>@item.Value</td>
+        </tr>
+    }
+  </tbody>
+</table>
