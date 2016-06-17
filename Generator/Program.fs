@@ -12,19 +12,22 @@ let configureBus()=
 
 [<EntryPoint>]
 let main argv = 
-    printfn "%A" argv
     let busControl = configureBus()
+    let mutable run = true
     using(busControl.Start())
         (fun h->
-            let mutable run = true
-            while run do
-                printfn "Enter message (or quit to exit)" 
-                printfn "> "
-                let value = Console.ReadLine()
-                match value with
-                | "quit" -> run<-false
-                | _ ->busControl.Publish<ValueEntered>({ Value=value }) |> ignore
-            busControl.Stop() |> ignore
+            printfn "Enter message (or ctrl+c to exit)" 
+            try
+                while run do
+                    printf "> "
+                    let value = Console.ReadLine()
+                    if not(String.IsNullOrEmpty(value)) then
+                        busControl.Publish<ValueEntered>({ Value=value }) |> ignore
+                        printfn "published %s" value 
+                    else
+                        ()
+            finally
+               busControl.Stop()
         )
     0 // return an integer exit code
 
