@@ -43,7 +43,7 @@ namespace Service
                     h.Username("guest");
                     h.Password("guest");
                 });
-                cfg.ReceiveEndpoint(host, "customer_update_queue", e =>
+                cfg.ReceiveEndpoint(host, "service_queue", e =>
                  {
                      e.Consumer<ValueEnteredConsumer>();
                  });
