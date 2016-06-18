@@ -8,6 +8,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MassTransitStudies.Generato
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MassTransitStudies.Messages", "Messages\MassTransitStudies.Messages.fsproj", "{EAD8BA51-700C-4032-A163-848CDF7A21CD}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MassTransitStudies.Subscriber", "Subscriber\MassTransitStudies.Subscriber.fsproj", "{99BDD47C-A1D3-455A-82C4-1C4F56F6B00C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{EAD8BA51-700C-4032-A163-848CDF7A21CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAD8BA51-700C-4032-A163-848CDF7A21CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAD8BA51-700C-4032-A163-848CDF7A21CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99BDD47C-A1D3-455A-82C4-1C4F56F6B00C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99BDD47C-A1D3-455A-82C4-1C4F56F6B00C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99BDD47C-A1D3-455A-82C4-1C4F56F6B00C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99BDD47C-A1D3-455A-82C4-1C4F56F6B00C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
