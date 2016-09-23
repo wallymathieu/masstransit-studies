@@ -13,3 +13,18 @@
     }
   </tbody>
 </table>
+<table>
+  <thead>
+    <tr><th>DelayedValue</th></tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model.Delayed)
+    {
+        <tr>
+          <td>@item.DelayedValue</td>
+        </tr>
+    }
+  </tbody>
+</table>
+
+

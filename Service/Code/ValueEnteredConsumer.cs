@@ -15,5 +15,13 @@ namespace MassTransitStudies.Service
             return Task.FromResult("");
         }
     }
+    public class DelayedMessageConsumer:IConsumer<DelayedMessage>
+    {
+        public Task Consume(ConsumeContext<DelayedMessage> context)
+        {
+            Global.repository.Add(context.Message);
+            return Task.FromResult("");
+        }            
+    }
 }
 

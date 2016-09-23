@@ -7,9 +7,13 @@ namespace MassTransitStudies.Service
     public class ReceivedMessages
     {
         public readonly ValueEntered[] Values;
-        public ReceivedMessages(IEnumerable<ValueEntered> values)
+
+        public readonly DelayedMessage[] Delayed;
+
+        public ReceivedMessages(IEnumerable<ValueEntered> values, IEnumerable<DelayedMessage> delayed)
         {
-            Values = values.ToArray(); 
+            Values = values.ToArray();
+            Delayed = delayed.ToArray();
         }
     }
 }

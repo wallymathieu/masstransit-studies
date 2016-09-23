@@ -31,7 +31,7 @@ namespace Service
 
         protected void Application_End()
         {
-            _busControl.Stop(); ;
+            _busControl.Stop();
         }
 
         IBusControl ConfigureBus()
@@ -43,9 +43,11 @@ namespace Service
                     h.Username("guest");
                     h.Password("guest");
                 });
+                cfg.UseDelayedExchangeMessageScheduler();
                 cfg.ReceiveEndpoint(host, "customer_update_queue", e =>
                  {
                      e.Consumer<ValueEnteredConsumer>();
+                     e.Consumer<DelayedMessageConsumer>();
                  });
             });
         }

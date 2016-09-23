@@ -3,12 +3,15 @@
 open MassTransit
 open System
 open MassTransitStudies.Messages
+open MassTransit.QuartzIntegration
 let configureBus()=
     Bus.Factory.CreateUsingRabbitMq(fun cfg ->
                 cfg.Host(new Uri("rabbitmq://localhost"), (fun h ->
                     h.Username("guest")
                     h.Password("guest")
-                )) |> ignore)
+                )) |> ignore
+                cfg.UseInMemoryScheduler()
+                )
 
 [<EntryPoint>]
 let main argv = 
@@ -22,7 +25,12 @@ let main argv =
                     printf "> "
                     let value = Console.ReadLine()
                     if not(String.IsNullOrEmpty(value)) then
-                        busControl.Publish<ValueEntered>({ Value=value }) |> ignore
+                        let sendEndpoint =  busControl.GetSendEndpoint(Uri("rabbitmq://localhost/quartz"))
+                        let s=sendEndpoint.Result.ScheduleSend<ValueEntered>(Uri("rabbitmq://localhost/customer_update_queue"),
+                                                                        TimeSpan.FromSeconds(1.),
+                                                                        {Value=value},Threading.CancellationToken.None)
+                        s.Wait()
+                        //busControl.Publish<ValueEntered>({ Value=value }) |> ignore
                         printfn "published %s" value 
                     else
                         ()
