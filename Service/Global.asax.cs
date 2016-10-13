@@ -44,7 +44,7 @@ namespace Service
                     h.Password("guest");
                 });
                 cfg.UseDelayedExchangeMessageScheduler();
-                cfg.ReceiveEndpoint(host, "customer_update_queue", e =>
+                cfg.ReceiveEndpoint(host, "service_queue", e =>
                  {
                      e.Consumer<ValueEnteredConsumer>();
                      e.Consumer<DelayedMessageConsumer>();
