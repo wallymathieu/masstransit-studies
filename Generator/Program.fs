@@ -30,7 +30,8 @@ let main argv =
                                                                         TimeSpan.FromSeconds(1.),
                                                                         {DelayedValue=value},Threading.CancellationToken.None)
                         s.Wait()
-                        busControl.Publish<ValueEntered>({ Value=value }) |> ignore
+                        let s=busControl.Publish<ValueEntered>({ Value=value })
+                        s.Wait()
                         printfn "published %s" value 
                     else
                         ()
