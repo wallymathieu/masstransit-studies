@@ -6,8 +6,8 @@ namespace MassTransitStudies.Service
 {
     public class ReceivedMessages
     {
-        public readonly ValueEntered[] Values;
-        public ReceivedMessages(IEnumerable<ValueEntered> values)
+        public readonly IValueEntered[] Values;
+        public ReceivedMessages(IEnumerable<IValueEntered> values)
         {
             Values = values.ToArray(); 
         }
