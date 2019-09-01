@@ -9,7 +9,6 @@ using MassTransit.Logging.Tracing;
 using MassTransitStudies.Messages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 namespace MassTransitStudies.Generator
@@ -20,34 +19,15 @@ namespace MassTransitStudies.Generator
 
         static async Task Main(string[] args)
         {
-            var config = new ConfigurationBuilder();
-                    config.AddJsonFile("appsettings.json", true);
-                    config.AddEnvironmentVariables();
-
-                    if (args != null)
-                        config.AddCommandLine(args);
-            Configuration = config.Build();
-            var services = new ServiceCollection();
-    
-            services.AddLogging();
-            services.Configure<AppConfig>(Configuration.GetSection("AppConfig"));
-
-            services.AddMassTransit(cfg =>
-            {
-                cfg.AddBus(ConfigureBus);
-            });
-
-            var svcProvider = services.BuildServiceProvider();
-            var logging=svcProvider.GetRequiredService<ILoggingBuilder>();
-            logging.AddConfiguration(Configuration.GetSection("Logging"));
-            logging.AddConsole();
-            var _bus = svcProvider.GetRequiredService<IBusControl>();
+            Configure(args);
+            var svcProvider = ServiceProvider();
+            var busControl = svcProvider.GetRequiredService<IBusControl>();
             if (Logger.Current.GetType() == typeof(TraceLogger))
                 ExtensionsLogger.Use(svcProvider.GetRequiredService<ILoggerFactory>());
-            var _logger = svcProvider
+            var logger = svcProvider
                             .GetRequiredService<ILoggerFactory>()
                             .CreateLogger<Program>();
-            await _bus.StartAsync().ConfigureAwait(false);
+            await busControl.StartAsync().ConfigureAwait(false);
             Console.WriteLine("Enter message (or ctrl+c to exit)");
             try
             {
@@ -57,7 +37,7 @@ namespace MassTransitStudies.Generator
                     var value = Console.ReadLine();
                     if (!string.IsNullOrEmpty(value))
                     {
-                        await _bus.Publish(ValueEnteredFactory.Create(value))
+                        await busControl.Publish(ValueEnteredFactory.Create(value))
                                 .ConfigureAwait(false);
                         Console.WriteLine($"published {value}");
                     }
@@ -65,12 +45,43 @@ namespace MassTransitStudies.Generator
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,"'while' exception");
+                logger.LogError(ex, "'while' exception");
             }
             finally
             {
-                _bus.Stop();
+                busControl.Stop();
             }
+        }
+
+        private static ServiceProvider ServiceProvider()
+        {
+            var services = new ServiceCollection();
+
+            services.AddLogging(logging =>
+            {
+                logging.AddConfiguration(Configuration.GetSection("Logging"));
+                logging.AddConsole();
+            });
+            services.Configure<AppConfig>(Configuration.GetSection("AppConfig"));
+
+            services.AddMassTransit(cfg =>
+            {
+                cfg.AddBus(ConfigureBus);
+            });
+
+            var svcProvider = services.BuildServiceProvider();
+            return svcProvider;
+        }
+
+        private static void Configure(string[] args)
+        {
+            var config = new ConfigurationBuilder();
+            config.AddJsonFile("appsettings.json", true);
+            config.AddEnvironmentVariables();
+
+            if (args != null)
+                config.AddCommandLine(args);
+            Configuration = config.Build();
         }
 
         static IBusControl ConfigureBus(IServiceProvider provider)
