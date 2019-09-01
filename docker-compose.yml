@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
+  masstransitstudies.subscriber:
+    image: ${REGISTRY:-m}/subscriber:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Subscriber/Dockerfile    
+    depends_on:
+      - rabbitmq
+
+  masstransitstudies.service:
+    image: ${REGISTRY:-m}/service:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Service/Dockerfile    
+    depends_on:
+      - rabbitmq
