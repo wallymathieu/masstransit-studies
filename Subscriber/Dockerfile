@@ -7,8 +7,8 @@ COPY Subscriber/*.csproj ./Subscriber/
 RUN dotnet restore ./Subscriber/
 
 # Copy everything else and build
-COPY Messages/*.* ./Messages/
-COPY Subscriber/*.* ./Subscriber/
+COPY Messages/ ./Messages/
+COPY Subscriber/ ./Subscriber/
 RUN dotnet publish ./Subscriber/ -c Release -o out
 
 # Build runtime image

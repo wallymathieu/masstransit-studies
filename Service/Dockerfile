@@ -7,8 +7,8 @@ COPY Service/*.csproj ./Service/
 RUN dotnet restore ./Service/
 
 # Copy everything else and build
-COPY Messages/*.* ./Messages/
-COPY Service/*.* ./Service/
+COPY Messages/ ./Messages/
+COPY Service/ ./Service/
 RUN dotnet publish ./Service/ -c Release -o out
 
 # Build runtime image
