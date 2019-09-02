@@ -7,9 +7,10 @@ COPY Subscriber/*.csproj ./Subscriber/
 RUN dotnet restore ./Subscriber/
 
 # Copy everything else and build
-COPY Messages/ ./Messages/
-COPY Subscriber/ ./Subscriber/
-RUN dotnet publish ./Subscriber/ -c Release -o out
+COPY Messages/. ./Messages/
+COPY Subscriber/. ./Subscriber/
+WORKDIR /app/Subscriber
+RUN dotnet publish -c Release -o ../out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2

@@ -5,7 +5,7 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
 
-  masstransitstudies.subscriber:
+  subscriber:
     image: ${REGISTRY:-m}/subscriber:${TAG:-latest}
     build:
       context: .
@@ -13,7 +13,7 @@ services:
     depends_on:
       - rabbitmq
 
-  masstransitstudies.service:
+  service:
     image: ${REGISTRY:-m}/service:${TAG:-latest}
     build:
       context: .
