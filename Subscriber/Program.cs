@@ -1,48 +1,69 @@
-﻿using MassTransit;
-using MassTransitStudies.Messages;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using MassTransit;
+using MassTransit.Definition;
+using MassTransit.Saga;
+using MassTransitStudies.Subscriber.Consumers;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
-namespace MassTransitStudies.Generator
+namespace MassTransitStudies.Subscriber
 {
-    class ValueEnteredConsumer : IConsumer<IValueEntered>
-    {
-        public Task Consume(ConsumeContext<IValueEntered> c)
-        {
-            Console.WriteLine($"Value entered { c.Message.Value}");
-            return Task.FromResult(0);
-        }
-    }
-
     class Program
     {
-        public static IBusControl ConfigureBus()
+        static async Task Main(string[] args)
         {
+            var builder = new HostBuilder()
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddJsonFile("appsettings.json", true);
+                    config.AddEnvironmentVariables();
+
+                    if (args != null)
+                        config.AddCommandLine(args);
+                })
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddLogging();
+                    services.Configure<AppConfig>(hostContext.Configuration.GetSection("AppConfig"));
+                    services.AddSingleton<ValueEnteredConsumer>();
+
+                    services.AddMassTransit(cfg =>
+                    {
+                        cfg.AddConsumersFromNamespaceContaining<ValueEnteredConsumer>();
+                        cfg.AddBus(ConfigureBus);
+                    });
+
+                    services.AddSingleton<IHostedService, MassTransitConsoleHostedService>();
+                })
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddConsole();
+                });
+
+            await builder.RunConsoleAsync().ConfigureAwait(false);
+        }
+
+        static IBusControl ConfigureBus(IServiceProvider provider)
+        {
+            var options = provider.GetRequiredService<IOptions<AppConfig>>().Value;
+
             return Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                var host = cfg.Host(new Uri("rabbitmq://localhost"), h =>
+                var host = cfg.Host(options.Host, options.VirtualHost, h =>
                 {
-                    h.Username("guest");
-                    h.Password("guest");
+                    h.Username(options.Username);
+                    h.Password(options.Password);
                 });
-                cfg.ReceiveEndpoint(host, "subscriber", e => e.Consumer<ValueEnteredConsumer>());
+
+                cfg.UseInMemoryScheduler();
+
+                cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
             });
         }
-
-        static void Main(string[] args)
-        {
-            var busControl = ConfigureBus();
-            busControl.Start();
-            Console.WriteLine("Press enter to finish");
-            try
-            {
-                Console.ReadLine();
-            }
-            finally
-            {
-                busControl.Stop();
-            }
-        }
-
     }
 }

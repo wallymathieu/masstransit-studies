@@ -1,0 +1,30 @@
+version: '3.4'
+
+# The default docker-compose.override file can use the "localhost" as the external name for testing web apps within the same dev machine. 
+# but values present in the environment vars at runtime will always override those defined inside the .env file
+# An external IP or DNS name has to be used (instead localhost and the 10.0.75.1 IP) when testing the Web apps and the Xamarin apps from remote machines/devices using the same WiFi, for instance.
+
+services:
+  rabbitmq:
+    ports:
+      - "15672:15672"  # Important: In a production environment your should remove the external port
+      - "5672:5672"    # Important: In a production environment your should remove the external port
+
+  subscriber:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AppConfig__Host=rabbitmq
+      - AppConfig__VirtualHost=/
+      - AppConfig__Username=guest
+      - AppConfig__Password=guest
+
+  service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - AppConfig__Host=rabbitmq
+      - AppConfig__VirtualHost=/
+      - AppConfig__Username=guest
+      - AppConfig__Password=guest
+    ports:
+      - "5100:80"
