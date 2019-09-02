@@ -11,7 +11,6 @@ COPY Messages/. ./Messages/
 COPY Service/. ./Service/
 WORKDIR /app/Service
 RUN dotnet publish -c Release -o ../out
-RUN cp -r ./wwwroot ../out/wwwroot
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
