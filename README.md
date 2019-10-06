@@ -4,7 +4,11 @@
 
 Use docker-compose to start rabbitMQ, site and subscriber service.
 
+> docker-compose up
+
 Use command line app ```Generator``` to generate messages. These messages should now be present on the site.
+
+> dotnet run --project ./Generator/
 
 ## What
 
