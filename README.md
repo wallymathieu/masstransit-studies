@@ -10,6 +10,10 @@ Use command line app ```Generator``` to generate messages. These messages should
 
 > dotnet run --project ./Generator/
 
+Goto site on localhost:
+
+> start http://localhost:5100/
+
 ## What
 
 This is mainly in order to demonstrate howto get started with Masstransit.
