@@ -1,9 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MassTransit;
-using MassTransit.ExtensionsLoggingIntegration;
-using MassTransit.Logging;
-using MassTransit.Logging.Tracing;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -17,9 +14,6 @@ namespace MassTransitStudies.Subscriber
         public MassTransitConsoleHostedService(IBusControl bus, ILoggerFactory loggerFactory)
         {
             _bus = bus;
-
-            if (loggerFactory != null && Logger.Current.GetType() == typeof(TraceLogger))
-                ExtensionsLogger.Use(loggerFactory);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

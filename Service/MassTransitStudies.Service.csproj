@@ -21,10 +21,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
-    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="5.5.5" />
-    <PackageReference Include="MassTransit.Extensions.Logging" Version="5.5.5" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="5.5.5" />
-    <PackageReference Include="MassTransit" Version="5.5.5" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="6.2.3" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="6.2.3" />
+    <PackageReference Include="MassTransit" Version="6.2.3" />
   </ItemGroup>
 
 

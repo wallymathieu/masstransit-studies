@@ -3,9 +3,6 @@
 using System.Threading.Tasks;
 using MassTransit;
 using MassTransit.Definition;
-using MassTransit.ExtensionsLoggingIntegration;
-using MassTransit.Logging;
-using MassTransit.Logging.Tracing;
 using MassTransitStudies.Messages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,8 +19,8 @@ namespace MassTransitStudies.Generator
             Configure(args);
             var svcProvider = ServiceProvider();
             var busControl = svcProvider.GetRequiredService<IBusControl>();
-            if (Logger.Current.GetType() == typeof(TraceLogger))
-                ExtensionsLogger.Use(svcProvider.GetRequiredService<ILoggerFactory>());
+            //if (Logger.Current.GetType() == typeof(TraceLogger))
+            //    ExtensionsLogger.Use(svcProvider.GetRequiredService<ILoggerFactory>());
             var logger = svcProvider
                             .GetRequiredService<ILoggerFactory>()
                             .CreateLogger<Program>();
