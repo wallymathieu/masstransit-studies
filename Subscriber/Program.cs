@@ -37,7 +37,6 @@ namespace MassTransitStudies.Subscriber
                         cfg.AddBus(ConfigureBus);
                     });
 
-                    services.AddSingleton<IHostedService, MassTransitConsoleHostedService>();
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {
@@ -54,7 +53,7 @@ namespace MassTransitStudies.Subscriber
 
             return Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                var host = cfg.Host(options.Host, options.VirtualHost, h =>
+                cfg.Host(options.Host, options.VirtualHost, h =>
                 {
                     h.Username(options.Username);
                     h.Password(options.Password);
@@ -62,7 +61,7 @@ namespace MassTransitStudies.Subscriber
 
                 cfg.UseInMemoryScheduler();
 
-                cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
+                //cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
             });
         }
     }

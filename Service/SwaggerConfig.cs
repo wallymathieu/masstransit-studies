@@ -1,17 +1,20 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace MassTransitStudies.Service
 {
     class SwaggerConfig
     {
-        private Microsoft.AspNetCore.Hosting.IHostingEnvironment env;
+        private IWebHostEnvironment env;
 
-        public SwaggerConfig(Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public SwaggerConfig(IWebHostEnvironment env)
         {
             this.env = env;
         }
@@ -41,14 +44,13 @@ namespace MassTransitStudies.Service
                     (webAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute))
                         as AssemblyInformationalVersionAttribute[])?.First()?.InformationalVersion;
 
-                options.SwaggerDoc("v1", new Info
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = informationalVersion ?? "dev",
                     Title = "API",
                     Description = "Some API",
-                    TermsOfService = "See license agreement",
-                    Contact = new Contact
-                    { Name = "Dev", Email = "developers@somecompany.com", Url = "https://somecompany.com" }
+                    Contact = new OpenApiContact
+                    { Name = "Dev", Email = "developers@somecompany.com", Url = new Uri("https://somecompany.com") }
                 });
 
                     //Set the comments path for the swagger json and ui.

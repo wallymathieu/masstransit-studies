@@ -15,7 +15,7 @@ namespace MassTransitStudies.Service
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             _swagger = new SwaggerConfig(env);
@@ -44,11 +44,9 @@ namespace MassTransitStudies.Service
                 cfg.AddConsumersFromNamespaceContaining<ValueEnteredConsumer>();
                 cfg.AddBus(ConfigureBus);
             });
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddSingleton<IHostedService, MassTransitApiHostedService>();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env, Microsoft.AspNetCore.Hosting.IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
             if (env.IsDevelopment())
             {
@@ -74,12 +72,12 @@ namespace MassTransitStudies.Service
 
             return Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                var host = cfg.Host(options.Host, options.VirtualHost, h =>
+                cfg.Host(options.Host, options.VirtualHost, h =>
                 {
                     h.Username(options.Username);
                     h.Password(options.Password);
                 });
-                cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
+                //cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
                 //cfg.ReceiveEndpoint(host, "service", e => e.Consumer<ValueEnteredConsumer>(e.));
             });
         }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>net6</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>MassTransitStudies.Service</RootNamespace>
     <VersionPrefix>1.0.0</VersionPrefix>
@@ -15,16 +15,11 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App">
-      <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
-      <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
-    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
-    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="5.5.5" />
-    <PackageReference Include="MassTransit.Extensions.Logging" Version="5.5.5" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="5.5.5" />
-    <PackageReference Include="MassTransit" Version="5.5.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.0" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.0" />
+    <PackageReference Include="MassTransit" Version="7.3.0" />
   </ItemGroup>
 
 

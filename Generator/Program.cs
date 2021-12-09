@@ -1,11 +1,7 @@
 ﻿using System;
-
 using System.Threading.Tasks;
 using MassTransit;
 using MassTransit.Definition;
-using MassTransit.ExtensionsLoggingIntegration;
-using MassTransit.Logging;
-using MassTransit.Logging.Tracing;
 using MassTransitStudies.Messages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,8 +18,6 @@ namespace MassTransitStudies.Generator
             Configure(args);
             var svcProvider = ServiceProvider();
             var busControl = svcProvider.GetRequiredService<IBusControl>();
-            if (Logger.Current.GetType() == typeof(TraceLogger))
-                ExtensionsLogger.Use(svcProvider.GetRequiredService<ILoggerFactory>());
             var logger = svcProvider
                             .GetRequiredService<ILoggerFactory>()
                             .CreateLogger<Program>();
@@ -90,7 +84,7 @@ namespace MassTransitStudies.Generator
 
             return Bus.Factory.CreateUsingRabbitMq(cfg =>
             {
-                var host = cfg.Host(options.Host, options.VirtualHost, h =>
+                cfg.Host(options.Host, options.VirtualHost, h =>
                 {
                     h.Username(options.Username);
                     h.Password(options.Password);
@@ -98,7 +92,7 @@ namespace MassTransitStudies.Generator
 
                 cfg.UseInMemoryScheduler();
 
-                cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
+                //cfg.ConfigureEndpoints(provider, new KebabCaseEndpointNameFormatter());
             });
         }
     }
